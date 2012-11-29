@@ -15,7 +15,10 @@ class LogisticRegression(object):
 		# symbolic desciption of how to compute prediction as class whose probability is maximal
 		self.y_pred = T.argmax(self.p_y_given_x, axis = 1)
 
+		print "###### LogisticRegression __init__ over! #########"
+
 	def negative_log_likelihood(self, y):
+		print "###### call LogisticRegression negative_log_likelihood! #########"
 		# NLL loss function
 		return - T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
 
@@ -114,8 +117,10 @@ def sgd_optimization_mnist(learning_rate=0.13, n_epochs=1000,
 	# Each MNIST image has size 28*28
 	classifier = LogisticRegression(input=x, n_in=28*28, n_out=10)
 
-	# the cost
+	# the cost function
+	# actually the 'classifier'
 	cost = classifier.negative_log_likelihood(y)
+	print theano.printing.debugprint(cost)
 
 	# function for computes the mistakes that are made by the model on a minibatch
 	test_model = theano.function(inputs=[index],
@@ -149,81 +154,15 @@ def sgd_optimization_mnist(learning_rate=0.13, n_epochs=1000,
 			y: train_set_y[index * batch_size: (index + 1) * batch_size]
 		})
 
-	###############
-	# Train Model #
-	###############	
-	# consider how to use the batches
+	# test classifier's variable
+	# train the first batch
+	# train_model(0);
+	# print "     Parameter W[0] : " , classifier.W.get_value()[154] , "\n"
+	# print "     Parameter b : " , classifier.b.get_value() , "\n"
+	# train_model(1);
+	# print "     Parameter W[0] : " , classifier.W.get_value()[154] , "\n"
+	# print "     Parameter b : " , classifier.b.get_value() , "\n"
 
-	# early-stopping parameters
-	patience = 5000
-	patience_increase = 2
-	improvement_thereshold = 0.995
-	validation_frequency = min(n_train_batches, patience / 2)
-	print "The frequency of validation is :" , validation_frequency
-
-	best_params = None
-	best_validation_loss = numpy.inf
-	test_score = 0.
-	start_time = time.clock()
-
-	done_looping = False
-	epoch = 0
-	while (epoch < n_epochs) and (not done_looping):
-		epoch += 1
-
-		for minibatch_index in xrange(n_train_batches):
-
-			minibatch_avg_cost = train_model(minibatch_index)
-			# iteration number
-			c_iter = epoch * n_train_batches + minibatch_index
-
-			if (c_iter + 1) % validation_frequency == 0:
-				# compute zero-one loss on validation set
-				validation_losses = [validation_model(i) 
-									for i in xrange(n_valid_batches)]
-				this_validation_lost = numpy.mean(validation_losses)
-
-				print ('epoch %i, minibatch %i/%i, validation error %f %%' % \
-					(epoch, minibatch_index + 1, n_train_batches, 
-						this_validation_lost * 100.))
-
-				# if we got the best validation score untial now
-				if this_validation_lost < best_validation_loss:
-					# improve patience if loss improvement is good enough
-					if this_validation_lost < best_validation_loss * \
-						improvement_thereshold:
-						patience = max(patience, c_iter * patience_increase)
-
-					best_validation_loss = this_validation_lost
-					# test it on the test set
-
-					test_losses = [test_model(i)
-									for i in xrange(n_test_batches)]
-					test_score = numpy.mean(test_losses)
-
-					print(('     epoch %i, minibatch %i/%i, test error of best'
-                       ' model %f %%') %
-                        (epoch, minibatch_index + 1, n_train_batches,
-                         test_score * 100.))
-
-					print "     Parameter W[0] : " , classifier.W.get_value()[154] , "\n"
-					print "     Parameter b : " , classifier.b.get_value() , "\n"
-
-			if patience <= c_iter: # if patience <= c_iter , then means the validation_loss has not been optimized for a long time
-				done_looping = True
-				break
-
-	# still in while loop
-	end_time = time.clock()
-	print(('Optimization complete with best validation score of %f %%,'
-		'with test performance %f %%') %
-			(best_validation_loss * 100., test_score * 100.))
-
-	print 'The code run for %d epochs, with %f epochs/sec' % (
-		epoch, 1. * epoch / (end_time - start_time))
-	print >> sys.stderr, ('The code for file ' + 
-						os.path.split(__file__)[1] +
-						' ran for %.1fs' % ((end_time - start_time)))
 
 if __name__ == '__main__':
 	sgd_optimization_mnist()
