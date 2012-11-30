@@ -15,6 +15,10 @@ class LogisticRegression(object):
 		# symbolic desciption of how to compute prediction as class whose probability is maximal
 		self.y_pred = T.argmax(self.p_y_given_x, axis = 1)
 
+		# parameters
+		self.params = [self.W, self.b];
+
+
 	def negative_log_likelihood(self, y):
 		# NLL loss function
 		return - T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
