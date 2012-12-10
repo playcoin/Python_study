@@ -11,7 +11,7 @@ def inner_fct(prior_result, A):
 	return prior_result * A
 
 # symbolic description of the result
-result, updates = theano.scan(fn=inner_fct, outputs_info=T.ones_like(A), non_sequenceS=A, n_steps=k)
+result, updates = theano.scan(fn=inner_fct, outputs_info=T.ones_like(A), non_sequences=A, n_steps=k)
 
 final_result = result[-1];
 
