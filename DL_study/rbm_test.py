@@ -13,3 +13,4 @@ from theano.tensor.shared_randomstreams import RandomStreams
 
 from utils import tile_raster_images
 from logistic_sgd import load_data
+
