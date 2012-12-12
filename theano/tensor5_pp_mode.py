@@ -6,8 +6,7 @@ from theano import pp
 rng = numpy.random
 
 x = T.dscalar('x')
-y = x ** 2
-z = T.grad(y, x)
+y = x ** 2z = T.grad(y, x)
 f = function([x], y)
 g = function([x], z)
 
