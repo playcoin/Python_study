@@ -1241,3 +1241,5 @@ print filter(lambda x : x in string.letters, text)
 
 # use build-in funtion "ord" to get ASCII number of 8-bits characters.
 print filter(lambda x : ord(x) > 96 and ord(x) < 123, text)
+
+# The 'chr' is the oppose function of 'ord', i.e. chr(97) == 'A'
