@@ -4,7 +4,7 @@ import re
 
 stop = False
 remote_url = "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=63579"
-while stop is False:
+while not stop:
 	# open the url, get the network object
 	data = urllib.urlopen(remote_url)
 	print remote_url
