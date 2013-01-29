@@ -338,7 +338,7 @@ def test_rbm(learning_rate = 0.1, training_epochs=15,
 	[presig_hids, hid_mfs, hid_samples, presig_vis,
 	 vis_mfs, vis_samples], updates = \
 	 					theano.scan(rbm.gibbs_vhv,
-	 							outputs_infor[None, None, None, None,
+	 							outputs_info=[None, None, None, None,
 	 										  None, persistent_vis_chain],
 	 							n_steps=plot_every)	
 
